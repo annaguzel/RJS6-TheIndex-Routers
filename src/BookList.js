@@ -6,33 +6,28 @@ import BookTable from "./BookTable";
 
 class BookList extends Component {
   state = {
-    filteredBooks: this.props.books
+    query: ""
   };
 
-  filterBooks = query => {
+  setQuery = query => {
     query = query.toLowerCase();
-    let filteredBooks = this.props.books.filter(book =>
-      book.title.toLowerCase().includes(query)
-    );
-    this.setState({ filteredBooks });
-  };
-
-  filterBooksByColor = bookColor => {
-    return this.state.filteredBooks.filter(book => book.color === bookColor);
+    this.setState({ query: query });
   };
 
   render() {
     const bookColor = this.props.match.params.bookColor;
-    let books = this.state.filteredBooks;
+    let books = this.props.books.filter(book =>
+      book.title.toLowerCase().includes(this.state.query)
+    );
 
     if (bookColor) {
-      books = this.filterBooksByColor(bookColor);
+      books = books.filter(book => book.color === bookColor);
     }
 
     return (
       <div>
         <h3>Books</h3>
-        <SearchBar handleFilter={this.filterBooks} />
+        <SearchBar handleFilter={this.setQuery} />
         <BookTable books={books} />
       </div>
     );
