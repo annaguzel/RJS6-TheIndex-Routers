@@ -7,27 +7,36 @@ import Sidebar from "./Sidebar";
 import Loading from "./Loading";
 import AuthorList from "./AuthorList";
 import AuthorDetail from "./AuthorDetail";
+import BookList from "./BookList";
 
 const instance = axios.create({
   baseURL: "https://the-index-api.herokuapp.com"
 });
-
+//Set up for axios request, to avoid misspelling the domain name
 class App extends Component {
   state = {
     authors: [],
-    loading: true
+    loading: true,
+    books: []
   };
 
   fetchAllAuthors = async () => {
     const res = await instance.get("/api/authors/");
     return res.data;
   };
+  // Step 1
+  fetchAllBooks = async () => {
+    const res = await instance.get("/api/books/");
+    return res.data;
+  };
 
   async componentDidMount() {
     try {
       const authors = await this.fetchAllAuthors();
+      const books = await this.fetchAllBooks();
       this.setState({
         authors: authors,
+        books: books,
         loading: false
       });
     } catch (err) {
@@ -49,6 +58,15 @@ class App extends Component {
               <AuthorList {...props} authors={this.state.authors} />
             )}
           />
+          {/* <Route
+            path="/authors/"
+            render={props => <BookList {...props} books={this.state.books} />}
+          /> */}
+          <Route
+            path="/books/:bookColor?"
+            render={props => <BookList {...props} books={this.state.books} />}
+          />
+          {/* // ... copying props */}
         </Switch>
       );
     }

@@ -24,7 +24,7 @@ class AuthorDetail extends Component {
       this.getAuthor();
     }
   }
-
+  //when we have coAuthors so that the page will update
   getAuthor = async () => {
     const authorID = this.props.match.params.authorID;
     this.setState({ loading: true });
